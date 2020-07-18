@@ -24,6 +24,16 @@ app.get("*", function(req, res) {
     res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
+app.post("/api/notes", function(req, res) {
+    var reqBody = req.body;
+    var notes = fs.readFileSync("./db/db.json");
+    reqBody.id = String(notes.length);
+    notes = JSON.parse(notes);
+    notes.push(reqBody);
+    fs.writeFileSync("./db/db.json", JSON.stringify(notes));
+    res.json(notes);
+})
+
 
 // Starts the server to begin listening
 app.listen(PORT, function() {
